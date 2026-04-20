@@ -55,10 +55,21 @@
             <StatusBadge :status="row.status" />
           </template>
         </el-table-column>
+        <el-table-column label="文件" width="120" align="center">
+          <template #default="{ row }">
+            <span v-if="!row.files || row.files.length === 0">
+              <el-tag type="info" size="small">无</el-tag>
+            </span>
+            <span v-else style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap">
+              <el-tag v-if="row.files.some(f => f.fileType === 'JPG')" type="success" size="small">JPG</el-tag>
+              <el-tag v-if="row.files.some(f => f.fileType === 'PDF')" type="" size="small">PDF</el-tag>
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="180" fixed="right" align="center">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="$router.push(`/certificates/${row.id}`)">查看</el-button>
-            <el-button type="success" size="small" link @click="handleDownload(row)">下载</el-button>
+            <el-button type="success" size="small" link @click="openDownload(row)">下载</el-button>
             <el-button type="danger" size="small" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -76,6 +87,8 @@
           @current-change="loadData"
         />
       </div>
+
+      <DownloadDialog v-model="downloadVisible" :cert="downloadCert" />
     </el-card>
   </div>
 </template>
@@ -86,11 +99,14 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { certificateApi } from '../api/certificate'
 import { personApi } from '../api/person'
 import StatusBadge from '../components/StatusBadge.vue'
+import DownloadDialog from '../components/DownloadDialog.vue'
 
 const loading = ref(false)
 const tableData = ref([])
 const total = ref(0)
 const persons = ref([])
+const downloadVisible = ref(false)
+const downloadCert = ref(null)
 
 const queryParams = reactive({
   keyword: '',
@@ -144,19 +160,9 @@ function formatDate(dateStr) {
   return dateStr.substring(0, 10)
 }
 
-async function handleDownload(row) {
-  try {
-    const blob = await certificateApi.download(row.id)
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = row.name + (row.originalFilename ? row.originalFilename.substring(row.originalFilename.lastIndexOf('.')) : '.pdf')
-    a.click()
-    URL.revokeObjectURL(url)
-    ElMessage.success('下载成功')
-  } catch (e) {
-    ElMessage.error('下载失败')
-  }
+function openDownload(cert) {
+  downloadCert.value = cert
+  downloadVisible.value = true
 }
 
 async function handleDelete(row) {

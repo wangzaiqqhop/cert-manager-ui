@@ -18,13 +18,29 @@ export const certificateApi = {
   remove(id) {
     return api.delete(`/certificates/${id}`)
   },
+  addFile(certificateId, file) {
+    const formData = new FormData()
+    formData.append('file', file)
+    return api.post(`/certificates/${certificateId}/files`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  removeFile(certificateId, fileType) {
+    return api.delete(`/certificates/${certificateId}/files/${fileType}`)
+  },
   getExpiring(days = 30) {
     return api.get('/certificates/expiring', { params: { days } })
   },
-  download(id) {
-    return api.get(`/certificates/${id}/download`, { responseType: 'blob' })
+  download(id, type, watermark) {
+    return api.get(`/certificates/${id}/download`, {
+      params: { type, watermark },
+      responseType: 'blob'
+    })
   },
-  preview(id) {
-    return api.get(`/certificates/${id}/preview`, { responseType: 'blob' })
+  preview(id, type) {
+    return api.get(`/certificates/${id}/preview`, {
+      params: type ? { type } : {},
+      responseType: 'blob'
+    })
   }
 }
