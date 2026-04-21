@@ -24,8 +24,15 @@
         <el-descriptions-item label="备注" :span="2">{{ detail.description || '-' }}</el-descriptions-item>
       </el-descriptions>
 
+      <div v-else-if="loadError" style="text-align: center; padding: 60px 0; color: #909399">
+        <el-icon style="font-size: 48px; margin-bottom: 16px"><Warning /></el-icon>
+        <div style="font-size: 16px; margin-bottom: 8px">无法加载证书详情</div>
+        <div style="font-size: 13px; color: #c0c4cc">您可能没有权限查看此证书，或证书不存在</div>
+        <el-button type="primary" style="margin-top: 20px" @click="router.push('/certificates')">返回证书列表</el-button>
+      </div>
+
       <!-- File Preview -->
-      <div style="margin-top: 24px">
+      <div v-if="detail" style="margin-top: 24px">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
           <span style="font-weight: bold">证书文件</span>
           <el-button type="primary" size="small" @click="showUploadDialog">追加文件</el-button>
@@ -57,7 +64,7 @@
       <DownloadDialog v-model="downloadVisible" :cert="downloadCert" />
 
       <!-- Upload File Dialog -->
-      <el-dialog v-model="uploadVisible" title="追加证书文件" width="400px">
+      <el-dialog v-if="detail" v-model="uploadVisible" title="追加证书文件" width="400px">
         <div style="margin-bottom: 16px">
           <div style="font-size: 13px; color: #666; margin-bottom: 12px">
             选择要上传的文件类型（已有文件会被覆盖）：
@@ -94,16 +101,19 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { certificateApi } from '../api/certificate'
+import { personApi } from '../api/person'
 import StatusBadge from '../components/StatusBadge.vue'
 import FilePreview from '../components/FilePreview.vue'
 import DownloadDialog from '../components/DownloadDialog.vue'
-import { UploadFilled } from '@element-plus/icons-vue'
+import { UploadFilled, Warning } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const loading = ref(false)
 const detail = ref(null)
+const persons = ref([])
+const loadError = ref(false)
 const previewVisible = ref(false)
 const previewBlob = ref(null)
 const previewFileName = ref('')
@@ -115,17 +125,34 @@ const uploadFileRef = ref(null)
 const uploadFile = ref(null)
 const uploading = ref(false)
 
-onMounted(() => {
-  loadDetail()
+onMounted(async () => {
+  await Promise.all([loadDetail(), loadPersons()])
 })
+
+async function loadPersons() {
+  try {
+    const res = await personApi.list({ size: 1000 })
+    persons.value = res.data?.content || res.data?.records || res.data?.data || []
+  } catch (e) {
+    persons.value = []
+  }
+}
 
 async function loadDetail() {
   loading.value = true
+  loadError.value = false
   try {
     const res = await certificateApi.getById(route.params.id)
-    detail.value = res.data
+    const cert = res.data
+    if (cert) {
+      const personName = persons.value.find(p => p.id === cert.personId)?.name || cert.personId
+      detail.value = { ...cert, personName }
+    } else {
+      loadError.value = true
+    }
   } catch (e) {
-    ElMessage.error('加载失败')
+    loadError.value = true
+    ElMessage.error('加载失败: ' + (e.response?.status === 403 ? '无权访问' : e.message))
   } finally {
     loading.value = false
   }
