@@ -18,5 +18,8 @@ export const userApi = {
   },
   resetPassword(id) {
     return api.post(`/users/${id}/reset-password`)
+  },
+  changePassword(data) {
+    return api.put('/users/me/password', data)
   }
 }

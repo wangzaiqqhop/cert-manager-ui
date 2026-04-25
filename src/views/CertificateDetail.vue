@@ -5,57 +5,132 @@
         <div style="display: flex; justify-content: space-between; align-items: center">
           <span style="font-size: 16px; font-weight: bold">证书详情</span>
           <div style="display: flex; gap: 8px">
+            <el-button type="warning" @click="$router.push(`/certificates/${route.params.id}/edit`)">编辑</el-button>
             <el-button type="success" @click="openDownload">下载</el-button>
             <el-button type="danger" @click="handleDelete">删除</el-button>
           </div>
         </div>
       </template>
 
-      <el-descriptions :column="2" border v-if="detail">
-        <el-descriptions-item label="证书名称">{{ detail.name }}</el-descriptions-item>
-        <el-descriptions-item label="归属人">{{ detail.personName }}</el-descriptions-item>
-        <el-descriptions-item label="证书类型">{{ detail.type }}</el-descriptions-item>
-        <el-descriptions-item label="状态"><StatusBadge :status="detail.status" /></el-descriptions-item>
-        <el-descriptions-item label="颁发机构">{{ detail.issuer }}</el-descriptions-item>
-        <el-descriptions-item label="证书编号">{{ detail.serialNumber }}</el-descriptions-item>
-        <el-descriptions-item label="主题" :span="2">{{ detail.subject }}</el-descriptions-item>
-        <el-descriptions-item label="生效时间">{{ formatDate(detail.validFrom) }}</el-descriptions-item>
-        <el-descriptions-item label="失效时间">{{ formatDate(detail.validTo) }}</el-descriptions-item>
-        <el-descriptions-item label="备注" :span="2">{{ detail.description || '-' }}</el-descriptions-item>
-      </el-descriptions>
+      <el-tabs v-model="activeTab">
+        <!-- Tab 1: Certificate Info -->
+        <el-tab-pane label="证书信息" name="info">
+          <el-descriptions :column="2" border v-if="detail">
+            <el-descriptions-item label="证书名称">{{ detail.name }}</el-descriptions-item>
+            <el-descriptions-item label="归属人">{{ detail.personName }}</el-descriptions-item>
+            <el-descriptions-item label="证书类型">{{ detail.type }}</el-descriptions-item>
+            <el-descriptions-item label="状态"><StatusBadge :status="detail.status" /></el-descriptions-item>
+            <el-descriptions-item label="颁发机构">{{ detail.issuer }}</el-descriptions-item>
+            <el-descriptions-item label="证书编号">{{ detail.serialNumber }}</el-descriptions-item>
+            <el-descriptions-item label="主题" :span="2">{{ detail.subject }}</el-descriptions-item>
+            <el-descriptions-item label="生效时间">{{ formatDate(detail.validFrom) }}</el-descriptions-item>
+            <el-descriptions-item label="失效时间">{{ formatDate(detail.validTo) }}</el-descriptions-item>
+            <el-descriptions-item label="备注" :span="2">{{ detail.description || '-' }}</el-descriptions-item>
+          </el-descriptions>
 
-      <div v-else-if="loadError" style="text-align: center; padding: 60px 0; color: #909399">
-        <el-icon style="font-size: 48px; margin-bottom: 16px"><Warning /></el-icon>
-        <div style="font-size: 16px; margin-bottom: 8px">无法加载证书详情</div>
-        <div style="font-size: 13px; color: #c0c4cc">您可能没有权限查看此证书，或证书不存在</div>
-        <el-button type="primary" style="margin-top: 20px" @click="router.push('/certificates')">返回证书列表</el-button>
-      </div>
-
-      <!-- File Preview -->
-      <div v-if="detail" style="margin-top: 24px">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
-          <span style="font-weight: bold">证书文件</span>
-          <el-button type="primary" size="small" @click="showUploadDialog">追加文件</el-button>
-        </div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px">
-          <el-tag v-if="detail.files?.some(f => f.fileType === 'JPG')" type="success" size="large">JPG 图片</el-tag>
-          <el-tag v-if="detail.files?.some(f => f.fileType === 'PDF')" type="" size="large">PDF 文档</el-tag>
-          <el-tag v-if="!detail.files?.some(f => f.fileType === 'JPG')" type="info" size="large" style="opacity: 0.5">JPG（未上传）</el-tag>
-          <el-tag v-if="!detail.files?.some(f => f.fileType === 'PDF')" type="info" size="large" style="opacity: 0.5">PDF（未上传）</el-tag>
-        </div>
-        <div v-if="detail.files && detail.files.length > 0" style="display: flex; flex-direction: column; gap: 8px">
-          <div v-for="file in detail.files" :key="file.fileType"
-            style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid #eee; border-radius: 4px">
-            <el-tag :type="file.fileType === 'JPG' ? 'success' : ''" size="small">{{ file.fileType }}</el-tag>
-            <span style="flex: 1; font-size: 13px; color: #666">{{ file.originalFilename }}</span>
-            <el-button type="primary" size="small" link @click="handlePreview(file.fileType)">预览</el-button>
-            <el-button type="danger" size="small" link @click="handleDeleteFile(file.fileType)">删除</el-button>
+          <div v-else-if="loadError" style="text-align: center; padding: 60px 0; color: #909399">
+            <el-icon style="font-size: 48px; margin-bottom: 16px"><Warning /></el-icon>
+            <div style="font-size: 16px; margin-bottom: 8px">无法加载证书详情</div>
+            <div style="font-size: 13px; color: #c0c4cc">您可能没有权限查看此证书，或证书不存在</div>
+            <el-button type="primary" style="margin-top: 20px" @click="router.push('/certificates')">返回证书列表</el-button>
           </div>
-        </div>
-        <el-button v-if="detail.files && detail.files.length > 0" type="success" style="margin-top: 12px" @click="openDownload">
-          下载
-        </el-button>
-      </div>
+
+          <!-- File Preview -->
+          <div v-if="detail" style="margin-top: 24px">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
+              <span style="font-weight: bold">证书文件</span>
+              <el-button type="primary" size="small" @click="showUploadDialog">追加文件</el-button>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px">
+              <el-tag v-if="detail.files?.some(f => f.fileType === 'JPG')" type="success" size="large">JPG 图片</el-tag>
+              <el-tag v-if="detail.files?.some(f => f.fileType === 'PDF')" type="" size="large">PDF 文档</el-tag>
+              <el-tag v-if="!detail.files?.some(f => f.fileType === 'JPG')" type="info" size="large" style="opacity: 0.5">JPG（未上传）</el-tag>
+              <el-tag v-if="!detail.files?.some(f => f.fileType === 'PDF')" type="info" size="large" style="opacity: 0.5">PDF（未上传）</el-tag>
+            </div>
+            <div v-if="detail.files && detail.files.length > 0" style="display: flex; flex-direction: column; gap: 8px">
+              <div v-for="file in detail.files" :key="file.fileType"
+                style="display: flex; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid #eee; border-radius: 4px">
+                <el-tag :type="file.fileType === 'JPG' ? 'success' : ''" size="small">{{ file.fileType }}</el-tag>
+                <span style="flex: 1; font-size: 13px; color: #666">{{ file.originalFilename }}</span>
+                <el-button type="primary" size="small" link @click="handlePreview(file.fileType)">预览</el-button>
+                <el-button type="danger" size="small" link @click="handleDeleteFile(file.fileType)">删除</el-button>
+              </div>
+            </div>
+            <el-button v-if="detail.files && detail.files.length > 0" type="success" style="margin-top: 12px" @click="openDownload">
+              下载
+            </el-button>
+          </div>
+        </el-tab-pane>
+
+        <!-- Tab 2: Change History -->
+        <el-tab-pane label="变更记录" name="history">
+          <el-table :data="historyList" v-loading="historyLoading" stripe style="width: 100%"
+            :empty-text="loadError ? '无法加载变更记录' : '暂无变更记录'">
+            <el-table-column prop="operator" label="操作人" min-width="120" />
+            <el-table-column prop="createdAt" label="操作时间" min-width="160">
+              <template #default="{ row }">{{ formatDate(row.createdAt) }}</template>
+            </el-table-column>
+            <el-table-column prop="changeType" label="变更类型" min-width="120" />
+            <el-table-column prop="detail" label="变更内容" min-width="240">
+              <template #default="{ row }">
+                <span v-if="row.changeType === 'CREATE' || row.changeType === 'DELETE'">{{ row.detail }}</span>
+                <span v-else-if="row.changeType === 'FILE_ADD'">{{ row.detail }}</span>
+                <div v-else-if="row.changeType === 'UPDATE'" style="display: flex; flex-direction: column; gap: 4px">
+                  <span v-for="(change, field) in parseChanges(row.detail)" :key="field" style="font-size: 13px">
+                    <span style="color: #67c23a">{{ FIELD_LABELS[field] || field }}</span>:
+                    {{ change[0] }} → {{ change[1] }}
+                  </span>
+                </div>
+                <div v-else-if="row.changeType === 'FILE_REPLACE'">
+                  <span v-if="parseFileReplace(row.detail)" style="font-size: 13px">
+                    替换 <el-tag size="small">{{ parseFileReplace(row.detail).fileType }}</el-tag> 文件:
+                    {{ parseFileReplace(row.detail).oldFilename }}
+                    →
+                    {{ parseFileReplace(row.detail).newFilename }}
+                  </span>
+                  <span v-else>{{ row.detail }}</span>
+                  <div style="display: flex; gap: 8px; margin-top: 4px">
+                    <el-button
+                      v-if="row.oldFilePath"
+                      type="primary"
+                      size="small"
+                      link
+                      @click="handlePreviewHistory(row.id, 'old')"
+                    >
+                      预览旧文件
+                    </el-button>
+                    <el-button
+                      v-if="row.newFilePath"
+                      type="success"
+                      size="small"
+                      link
+                      @click="handlePreviewHistory(row.id, 'new')"
+                    >
+                      预览新文件
+                    </el-button>
+                  </div>
+                </div>
+                <span v-else>{{ row.detail }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100" fixed="right">
+              <template #default="{ row }">
+                <span v-if="row.changeType !== 'FILE_REPLACE'"></span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            v-if="historyTotal > 0"
+            background
+            layout="prev, pager, next"
+            :total="historyTotal"
+            :page-size="historySize"
+            :current-page="historyPage"
+            @current-change="handleHistoryPageChange"
+            style="margin-top: 16px; justify-content: flex-end"
+          />
+        </el-tab-pane>
+      </el-tabs>
 
       <!-- Preview Dialog -->
       <FilePreview v-model="previewVisible" :blob="previewBlob" :file-name="previewFileName" />
@@ -97,7 +172,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { certificateApi } from '../api/certificate'
@@ -109,6 +184,8 @@ import { UploadFilled, Warning } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
+
+const activeTab = ref('info')
 
 const loading = ref(false)
 const detail = ref(null)
@@ -125,9 +202,17 @@ const uploadFileRef = ref(null)
 const uploadFile = ref(null)
 const uploading = ref(false)
 
+const historyLoading = ref(false)
+const historyList = ref([])
+const historyTotal = ref(0)
+const historyPage = ref(1)
+const historySize = ref(10)
+
 onMounted(async () => {
   await Promise.all([loadDetail(), loadPersons()])
 })
+
+watch(activeTab, (tab) => { if (tab === 'history') loadHistory() })
 
 async function loadPersons() {
   try {
@@ -158,9 +243,81 @@ async function loadDetail() {
   }
 }
 
+async function loadHistory() {
+  historyLoading.value = true
+  try {
+    const res = await certificateApi.getChangeHistory(route.params.id, {
+      page: historyPage.value,
+      size: historySize.value
+    })
+    const data = res.data?.data || res.data
+    historyList.value = data?.content || data?.records || []
+    historyTotal.value = data?.totalElements || data?.total || 0
+  } catch (e) {
+    historyList.value = []
+    historyTotal.value = 0
+  } finally {
+    historyLoading.value = false
+  }
+}
+
+function handleHistoryPageChange(page) {
+  historyPage.value = page
+  loadHistory()
+}
+
+async function handlePreviewHistory(historyId, version = 'old') {
+  try {
+    const blob = version === 'new'
+      ? await certificateApi.previewHistoryNewFile(historyId)
+      : await certificateApi.previewHistoryFile(historyId)
+    const fileInfo = parseFileReplace(historyList.value.find(h => h.id === historyId)?.detail)
+    previewBlob.value = blob
+    previewFileName.value = version === 'new'
+      ? (fileInfo?.newFilename || `新文件_${historyId}`)
+      : (fileInfo?.oldFilename || `旧文件_${historyId}`)
+    previewVisible.value = true
+  } catch (e) {
+    ElMessage.error('预览快照失败')
+  }
+}
+
 function formatDate(dateStr) {
   if (!dateStr) return '-'
-  return dateStr.substring(0, 10)
+  return dateStr.substring(0, 16).replace('T', ' ')
+}
+
+const FIELD_LABELS = {
+  personId: '归属人',
+  name: '证书名称',
+  type: '证书类型',
+  issuer: '颁发机构',
+  serialNumber: '证书编号',
+  subject: '主题',
+  validFrom: '生效时间',
+  validTo: '失效时间',
+  description: '备注',
+  status: '状态'
+}
+
+function parseChanges(detail) {
+  if (!detail) return {}
+  try {
+    const obj = typeof detail === 'string' ? JSON.parse(detail) : detail
+    return obj.changes || {}
+  } catch {
+    return {}
+  }
+}
+
+function parseFileReplace(detail) {
+  if (!detail) return null
+  try {
+    const obj = typeof detail === 'string' ? JSON.parse(detail) : detail
+    return obj
+  } catch {
+    return null
+  }
 }
 
 async function handlePreview(fileType) {

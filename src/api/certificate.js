@@ -13,7 +13,11 @@ export const certificateApi = {
     })
   },
   update(id, data) {
-    return api.put(`/certificates/${id}`, data)
+    const formData = new FormData()
+    Object.entries(data).forEach(([k, v]) => formData.append(k, v ?? ''))
+    return api.put(`/certificates/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
   remove(id) {
     return api.delete(`/certificates/${id}`)
@@ -42,5 +46,14 @@ export const certificateApi = {
       params: type ? { type } : {},
       responseType: 'blob'
     })
+  },
+  getChangeHistory(certId, params) {
+    return api.get(`/certificates/${certId}/change-history`, { params })
+  },
+  previewHistoryFile(historyId) {
+    return api.get(`/certificates/history-file/${historyId}`, { responseType: 'blob' })
+  },
+  previewHistoryNewFile(historyId) {
+    return api.get(`/certificates/history-file/${historyId}/new`, { responseType: 'blob' })
   }
 }

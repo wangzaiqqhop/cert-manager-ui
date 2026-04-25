@@ -66,8 +66,9 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" fixed="right" align="center">
+        <el-table-column label="操作" width="220" fixed="right" align="center">
           <template #default="{ row }">
+            <el-button type="warning" size="small" link @click="$router.push(`/certificates/${row.id}/edit`)">编辑</el-button>
             <el-button type="primary" size="small" link @click="$router.push(`/certificates/${row.id}`)">查看</el-button>
             <el-button type="success" size="small" link @click="openDownload(row)">下载</el-button>
             <el-button type="danger" size="small" link @click="handleDelete(row)">删除</el-button>

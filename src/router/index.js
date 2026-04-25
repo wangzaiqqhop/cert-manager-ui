@@ -10,6 +10,7 @@ const routes = [
       { path: 'certificates', name: 'CertificateList', component: () => import('../views/CertificateList.vue') },
       { path: 'certificates/upload', name: 'CertificateUpload', component: () => import('../views/CertificateUpload.vue') },
       { path: 'certificates/:id', name: 'CertificateDetail', component: () => import('../views/CertificateDetail.vue') },
+      { path: 'certificates/:id/edit', name: 'CertificateEdit', component: () => import('../views/CertificateEdit.vue') },
       { path: 'admin/persons', name: 'PersonManage', component: () => import('../views/PersonManage.vue'), meta: { requiresAdmin: true } },
       { path: 'admin/users', name: 'UserManage', component: () => import('../views/UserManage.vue'), meta: { requiresAdmin: true } },
       { path: 'admin/audit-logs', name: 'AuditLog', component: () => import('../views/AuditLog.vue'), meta: { requiresAdmin: true } },
