@@ -24,7 +24,7 @@
           <el-icon><User /></el-icon>
           <span>归属人管理</span>
         </el-menu-item>
-        <el-menu-item v-if="userStore.isAdmin" index="/admin/users">
+        <el-menu-item v-if="userStore.isSuperAdmin" index="/admin/users">
           <el-icon><UserFilled /></el-icon>
           <span>用户管理</span>
         </el-menu-item>

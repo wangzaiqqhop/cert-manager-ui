@@ -12,7 +12,7 @@ const routes = [
       { path: 'certificates/:id', name: 'CertificateDetail', component: () => import('../views/CertificateDetail.vue') },
       { path: 'certificates/:id/edit', name: 'CertificateEdit', component: () => import('../views/CertificateEdit.vue') },
       { path: 'admin/persons', name: 'PersonManage', component: () => import('../views/PersonManage.vue'), meta: { requiresAdmin: true } },
-      { path: 'admin/users', name: 'UserManage', component: () => import('../views/UserManage.vue'), meta: { requiresAdmin: true } },
+      { path: 'admin/users', name: 'UserManage', component: () => import('../views/UserManage.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'admin/audit-logs', name: 'AuditLog', component: () => import('../views/AuditLog.vue'), meta: { requiresAdmin: true } },
     ]
   }
@@ -23,6 +23,14 @@ const router = createRouter({
   routes
 })
 
+function getUserRole() {
+  try {
+    const raw = localStorage.getItem('userInfo')
+    if (raw) return JSON.parse(raw).role
+  } catch (e) { /* ignore */ }
+  return null
+}
+
 // Route guard
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
@@ -30,6 +38,12 @@ router.beforeEach((to, from, next) => {
     next('/login')
   } else if (to.path === '/login' && token) {
     next('/')
+  } else if (to.meta.requiresSuperAdmin && getUserRole() !== 'SUPER_ADMIN') {
+    next('/')
+  } else if (to.meta.requiresAdmin) {
+    const role = getUserRole()
+    if (role !== 'ADMIN' && role !== 'SUPER_ADMIN') next('/')
+    else next()
   } else {
     next()
   }

@@ -49,9 +49,20 @@ watch(visible, val => {
 })
 
 const fileType = computed(() => {
-  if (!props.fileName) return ''
-  const ext = props.fileName.split('.').pop().toLowerCase()
-  return ext
+  // Try file extension first
+  if (props.fileName) {
+    const ext = props.fileName.split('.').pop().toLowerCase()
+    if (ext && (ext === 'pdf' || ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext))) {
+      return ext
+    }
+  }
+  // Fall back to blob MIME type (from Content-Type response header)
+  if (props.blob && props.blob.type) {
+    const mime = props.blob.type
+    if (mime === 'application/pdf') return 'pdf'
+    if (mime.startsWith('image/')) return mime.split('/')[1]
+  }
+  return ''
 })
 
 const isImage = computed(() => ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileType.value))

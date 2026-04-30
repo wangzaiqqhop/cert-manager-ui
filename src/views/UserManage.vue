@@ -14,21 +14,21 @@
       <el-table :data="tableData" v-loading="loading" stripe>
         <el-table-column prop="username" label="用户名" width="140" />
         <el-table-column prop="email" label="邮箱" min-width="200" />
-        <el-table-column prop="role" label="角色" width="100" align="center">
+        <el-table-column prop="role" label="角色" width="110" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.role === 'ADMIN' ? 'danger' : 'primary'" size="small">
-              {{ row.role === 'ADMIN' ? '管理员' : '普通用户' }}
+            <el-tag :type="row.role === 'SUPER_ADMIN' ? 'danger' : row.role === 'ADMIN' ? 'warning' : 'primary'" size="small">
+              {{ row.role === 'SUPER_ADMIN' ? '超级管理员' : row.role === 'ADMIN' ? '普通管理员' : '普通用户' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态" width="100" align="center">
+        <el-table-column prop="enabled" label="状态" width="100" align="center">
           <template #default="{ row }">
-            <el-tag :type="row.status === 'ACTIVE' ? 'success' : 'info'" size="small">
-              {{ row.status === 'ACTIVE' ? '启用' : '禁用' }}
+            <el-tag :type="row.enabled ? 'success' : 'info'" size="small">
+              {{ row.enabled ? '启用' : '禁用' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="160" />
+        <el-table-column prop="createdAt" label="创建时间" width="160" />
         <el-table-column label="操作" width="220" fixed="right" align="center">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openDialog('edit', row)">编辑</el-button>
@@ -63,12 +63,16 @@
         </el-form-item>
         <el-form-item label="角色" prop="role">
           <el-select v-model="form.role" placeholder="请选择角色" style="width: 100%">
-            <el-option label="管理员" value="ADMIN" />
+            <el-option label="超级管理员" value="SUPER_ADMIN" />
+            <el-option label="普通管理员" value="ADMIN" />
             <el-option label="普通用户" value="USER" />
           </el-select>
         </el-form-item>
         <el-form-item v-if="!editId" label="密码" prop="password">
           <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password clearable />
+        </el-form-item>
+        <el-form-item v-if="editId" label="启用状态">
+          <el-switch v-model="form.enabled" active-text="启用" inactive-text="禁用" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -95,7 +99,7 @@ const editId = ref(null)
 const queryParams = reactive({ page: 1, size: 10 })
 
 const form = reactive({
-  username: '', email: '', role: 'USER', password: ''
+  username: '', email: '', role: 'USER', password: '', enabled: true
 })
 
 const rules = computed(() => ({
@@ -128,10 +132,10 @@ async function loadData() {
 function openDialog(mode, row = {}) {
   if (mode === 'edit') {
     editId.value = row.id
-    Object.assign(form, { username: row.username, email: row.email, role: row.role, password: '' })
+    Object.assign(form, { username: row.username, email: row.email, role: row.role, password: '', enabled: row.enabled !== false })
   } else {
     editId.value = null
-    Object.assign(form, { username: '', email: '', role: 'USER', password: '' })
+    Object.assign(form, { username: '', email: '', role: 'USER', password: '', enabled: true })
   }
   dialogVisible.value = true
 }
@@ -142,7 +146,7 @@ async function handleSubmit() {
   submitLoading.value = true
   try {
     if (editId.value) {
-      await userApi.update(editId.value, { username: form.username, email: form.email, role: form.role })
+      await userApi.update(editId.value, { username: form.username, email: form.email, role: form.role, enabled: form.enabled })
       ElMessage.success('更新成功')
     } else {
       await userApi.create(form)

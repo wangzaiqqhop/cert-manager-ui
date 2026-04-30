@@ -73,8 +73,50 @@
             <el-table-column prop="changeType" label="变更类型" min-width="120" />
             <el-table-column prop="detail" label="变更内容" min-width="240">
               <template #default="{ row }">
-                <span v-if="row.changeType === 'CREATE' || row.changeType === 'DELETE'">{{ row.detail }}</span>
-                <span v-else-if="row.changeType === 'FILE_ADD'">{{ row.detail }}</span>
+                <template v-if="row.changeType === 'CREATE' || row.changeType === 'DELETE'">
+                  <span style="font-size: 13px">{{ row.detail }}</span>
+                  <div v-if="row.changeType === 'DELETE' && parseCertSnapshot(row.oldValue)" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px">
+                    <span v-for="file in parseCertSnapshot(row.oldValue).files" :key="file.fileType"
+                      style="display: flex; align-items: center; gap: 4px; font-size: 13px">
+                      <el-tag size="small" type="danger">{{ file.fileType }}</el-tag>
+                      <span style="color: #999">{{ file.originalFilename }}</span>
+                      <el-button type="warning" size="small" link
+                        @click="handlePreviewDeletedCert(row.id, file.fileType)">预览</el-button>
+                    </span>
+                  </div>
+                </template>
+                <div v-else-if="row.changeType === 'FILE_ADD'" style="display: flex; flex-direction: column; gap: 4px">
+                  <span v-if="parseFileChange(row.detail)" style="font-size: 13px">
+                    追加 <el-tag size="small">{{ parseFileChange(row.detail).fileType }}</el-tag> 文件:
+                    {{ parseFileChange(row.detail).filename }}
+                  </span>
+                  <span v-else>{{ row.detail }}</span>
+                  <el-button
+                    v-if="row.newFilePath"
+                    type="success"
+                    size="small"
+                    link
+                    @click="handlePreviewHistory(row.id, 'new')"
+                  >
+                    预览
+                  </el-button>
+                </div>
+                <div v-else-if="row.changeType === 'FILE_DELETE'" style="display: flex; flex-direction: column; gap: 4px">
+                  <span v-if="parseFileChange(row.detail)" style="font-size: 13px">
+                    删除 <el-tag size="small" type="danger">{{ parseFileChange(row.detail).fileType }}</el-tag> 文件:
+                    {{ parseFileChange(row.detail).filename }}
+                  </span>
+                  <span v-else>{{ row.detail }}</span>
+                  <el-button
+                    v-if="row.oldFilePath"
+                    type="primary"
+                    size="small"
+                    link
+                    @click="handlePreviewHistory(row.id, 'old')"
+                  >
+                    预览已删除文件
+                  </el-button>
+                </div>
                 <div v-else-if="row.changeType === 'UPDATE'" style="display: flex; flex-direction: column; gap: 4px">
                   <span v-for="(change, field) in parseChanges(row.detail)" :key="field" style="font-size: 13px">
                     <span style="color: #67c23a">{{ FIELD_LABELS[field] || field }}</span>:
@@ -268,14 +310,25 @@ function handleHistoryPageChange(page) {
 
 async function handlePreviewHistory(historyId, version = 'old') {
   try {
+    const row = historyList.value.find(h => h.id === historyId)
     const blob = version === 'new'
       ? await certificateApi.previewHistoryNewFile(historyId)
       : await certificateApi.previewHistoryFile(historyId)
-    const fileInfo = parseFileReplace(historyList.value.find(h => h.id === historyId)?.detail)
+    const fileInfo = parseFileReplace(row?.detail)
+    // FILE_REPLACE uses oldFilename/newFilename, FILE_ADD/FILE_DELETE use filename
+    let name = version === 'new'
+      ? (fileInfo?.newFilename || fileInfo?.filename)
+      : (fileInfo?.oldFilename || fileInfo?.filename)
+    // Fall back to extracting filename from the stored file path
+    if (!name) {
+      const filePath = version === 'new' ? row?.newFilePath : row?.oldFilePath
+      if (filePath) {
+        const lastSep = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'))
+        name = lastSep >= 0 ? filePath.substring(lastSep + 1) : filePath
+      }
+    }
     previewBlob.value = blob
-    previewFileName.value = version === 'new'
-      ? (fileInfo?.newFilename || `新文件_${historyId}`)
-      : (fileInfo?.oldFilename || `旧文件_${historyId}`)
+    previewFileName.value = name || `file_${historyId}`
     previewVisible.value = true
   } catch (e) {
     ElMessage.error('预览快照失败')
@@ -317,6 +370,38 @@ function parseFileReplace(detail) {
     return obj
   } catch {
     return null
+  }
+}
+
+function parseFileChange(detail) {
+  return parseFileReplace(detail)
+}
+
+function parseCertSnapshot(oldValue) {
+  if (!oldValue) return null
+  try {
+    const obj = typeof oldValue === 'string' ? JSON.parse(oldValue) : oldValue
+    return obj
+  } catch {
+    return null
+  }
+}
+
+async function handlePreviewDeletedCert(historyId, fileType) {
+  try {
+    const blob = await certificateApi.previewHistoryFile(historyId)
+    const row = historyList.value.find(h => h.id === historyId)
+    const certSnapshot = parseCertSnapshot(row?.oldValue)
+    let name = ''
+    if (certSnapshot?.files) {
+      const file = certSnapshot.files.find(f => f.fileType === fileType)
+      name = file?.originalFilename || ''
+    }
+    previewBlob.value = blob
+    previewFileName.value = name || `${fileType}_deleted.${fileType.toLowerCase()}`
+    previewVisible.value = true
+  } catch (e) {
+    ElMessage.error('预览已删除文件失败')
   }
 }
 

@@ -24,13 +24,23 @@
         />
 
         <el-select v-model="queryParams.action" placeholder="操作类型" clearable style="width: 160px" @change="loadData">
-          <el-option label="CREATE" value="CREATE" />
-          <el-option label="UPDATE" value="UPDATE" />
-          <el-option label="DELETE" value="DELETE" />
-          <el-option label="DOWNLOAD" value="DOWNLOAD" />
-          <el-option label="UPLOAD" value="UPLOAD" />
+          <el-option label="CERT_UPLOAD" value="CERT_UPLOAD" />
+          <el-option label="CERT_UPDATE" value="CERT_UPDATE" />
+          <el-option label="CERT_DELETE" value="CERT_DELETE" />
+          <el-option label="CERT_VIEW" value="CERT_VIEW" />
+          <el-option label="CERT_DOWNLOAD" value="CERT_DOWNLOAD" />
+          <el-option label="PERSON_CREATE" value="PERSON_CREATE" />
+          <el-option label="PERSON_UPDATE" value="PERSON_UPDATE" />
+          <el-option label="PERSON_DELETE" value="PERSON_DELETE" />
+          <el-option label="USER_CREATE" value="USER_CREATE" />
+          <el-option label="USER_UPDATE" value="USER_UPDATE" />
+          <el-option label="USER_DELETE" value="USER_DELETE" />
+          <el-option label="PASSWORD_CHANGE" value="PASSWORD_CHANGE" />
           <el-option label="LOGIN" value="LOGIN" />
           <el-option label="LOGOUT" value="LOGOUT" />
+          <el-option label="FILE_ADD" value="FILE_ADD" />
+          <el-option label="FILE_REPLACE" value="FILE_REPLACE" />
+          <el-option label="FILE_DELETE" value="FILE_DELETE" />
         </el-select>
 
         <el-select v-model="queryParams.resourceType" placeholder="资源类型" clearable style="width: 160px" @change="loadData">
@@ -53,10 +63,10 @@
           </template>
         </el-table-column>
         <el-table-column prop="resourceType" label="资源类型" width="120" align="center" />
-        <el-table-column prop="resourceId" label="资源ID" width="100" />
-        <el-table-column prop="description" label="描述" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="resourceName" label="资源名称" min-width="180" show-overflow-tooltip />
+        <el-table-column prop="detail" label="描述" min-width="200" show-overflow-tooltip />
         <el-table-column prop="ipAddress" label="IP地址" width="140" />
-        <el-table-column prop="createTime" label="时间" width="170" />
+        <el-table-column prop="createdAt" label="时间" width="170" />
       </el-table>
 
       <!-- Pagination -->
@@ -128,13 +138,23 @@ function resetQuery() {
 
 function actionTagType(action) {
   const map = {
-    CREATE: 'success',
-    UPDATE: 'warning',
-    DELETE: 'danger',
-    DOWNLOAD: 'info',
-    UPLOAD: 'success',
+    CERT_UPLOAD: 'success',
+    CERT_UPDATE: 'warning',
+    CERT_DELETE: 'danger',
+    CERT_VIEW: 'info',
+    CERT_DOWNLOAD: 'info',
+    PERSON_CREATE: 'success',
+    PERSON_UPDATE: 'warning',
+    PERSON_DELETE: 'danger',
+    USER_CREATE: 'success',
+    USER_UPDATE: 'warning',
+    USER_DELETE: 'danger',
+    PASSWORD_CHANGE: 'warning',
     LOGIN: 'primary',
-    LOGOUT: 'info'
+    LOGOUT: 'info',
+    FILE_ADD: 'success',
+    FILE_REPLACE: 'warning',
+    FILE_DELETE: 'danger'
   }
   return map[action] || 'info'
 }
