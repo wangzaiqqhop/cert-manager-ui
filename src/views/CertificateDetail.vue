@@ -4,7 +4,7 @@
       <template #header>
         <div style="display: flex; justify-content: space-between; align-items: center">
           <span style="font-size: 16px; font-weight: bold">证书详情</span>
-          <div style="display: flex; gap: 8px">
+          <div v-if="!detail?.deleted" style="display: flex; gap: 8px">
             <el-button type="warning" @click="$router.push(`/certificates/${route.params.id}/edit`)">编辑</el-button>
             <el-button type="success" @click="openDownload">下载</el-button>
             <el-button type="danger" @click="handleDelete">删除</el-button>
@@ -12,13 +12,17 @@
         </div>
       </template>
 
+      <el-alert v-if="detail?.deleted" type="warning" :closable="false" style="margin-bottom: 16px">
+        此证书在回收站中，如需修改请先恢复。
+      </el-alert>
+
       <el-tabs v-model="activeTab">
         <!-- Tab 1: Certificate Info -->
         <el-tab-pane label="证书信息" name="info">
           <el-descriptions :column="2" border v-if="detail">
             <el-descriptions-item label="证书名称">{{ detail.name }}</el-descriptions-item>
             <el-descriptions-item label="归属人">{{ detail.personName }}</el-descriptions-item>
-            <el-descriptions-item label="证书类型">{{ detail.type }}</el-descriptions-item>
+            <el-descriptions-item label="证书类型">{{ certTypeLabel(detail.type) }}</el-descriptions-item>
             <el-descriptions-item label="状态"><StatusBadge :status="detail.status" /></el-descriptions-item>
             <el-descriptions-item label="颁发机构">{{ detail.issuer }}</el-descriptions-item>
             <el-descriptions-item label="证书编号">{{ detail.serialNumber }}</el-descriptions-item>
@@ -39,7 +43,7 @@
           <div v-if="detail" style="margin-top: 24px">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
               <span style="font-weight: bold">证书文件</span>
-              <el-button type="primary" size="small" @click="showUploadDialog">追加文件</el-button>
+              <el-button v-if="!detail?.deleted" type="primary" size="small" @click="showUploadDialog">追加文件</el-button>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px">
               <el-tag v-if="detail.files?.some(f => f.fileType === 'JPG')" type="success" size="large">JPG 图片</el-tag>
@@ -53,7 +57,7 @@
                 <el-tag :type="file.fileType === 'JPG' ? 'success' : ''" size="small">{{ file.fileType }}</el-tag>
                 <span style="flex: 1; font-size: 13px; color: #666">{{ file.originalFilename }}</span>
                 <el-button type="primary" size="small" link @click="handlePreview(file.fileType)">预览</el-button>
-                <el-button type="danger" size="small" link @click="handleDeleteFile(file.fileType)">删除</el-button>
+                <el-button v-if="!detail?.deleted" type="danger" size="small" link @click="handleDeleteFile(file.fileType)">删除</el-button>
               </div>
             </div>
             <el-button v-if="detail.files && detail.files.length > 0" type="success" style="margin-top: 12px" @click="openDownload">
@@ -222,6 +226,7 @@ import { personApi } from '../api/person'
 import StatusBadge from '../components/StatusBadge.vue'
 import FilePreview from '../components/FilePreview.vue'
 import DownloadDialog from '../components/DownloadDialog.vue'
+import { certTypeLabel } from '../utils/certType'
 import { UploadFilled, Warning } from '@element-plus/icons-vue'
 
 const route = useRoute()

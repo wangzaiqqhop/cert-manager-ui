@@ -18,13 +18,7 @@
 
         <el-form-item label="证书类型" prop="type">
           <el-select v-model="form.type" placeholder="请选择证书类型" style="width: 100%">
-            <el-option label="身份证" value="ID_CARD" />
-            <el-option label="营业执照" value="BUSINESS_LICENSE" />
-            <el-option label="税务登记证" value="TAX_CERTIFICATE" />
-            <el-option label="开户许可证" value="BANK_ACCOUNT_PERMIT" />
-            <el-option label="资质证书" value="QUALIFICATION" />
-            <el-option label="许可证" value="LICENSE" />
-            <el-option label="其他" value="OTHER" />
+            <el-option v-for="t in certTypes" :key="t.code" :label="t.name" :value="t.code" />
           </el-select>
         </el-form-item>
 
@@ -96,12 +90,14 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { certificateApi } from '../api/certificate'
 import { personApi } from '../api/person'
+import { certTypeApi } from '../api/certType'
 
 const router = useRouter()
 const formRef = ref(null)
 const uploadRef = ref(null)
 const loading = ref(false)
 const persons = ref([])
+const certTypes = ref([])
 const selectedFiles = ref([])  // [{ raw: File, type: 'JPG'|'PDF', name: string }]
 
 const form = reactive({
@@ -126,8 +122,12 @@ const rules = {
 
 onMounted(async () => {
   try {
-    const res = await personApi.list({ size: 1000 })
-    persons.value = res.data?.content || res.data?.records || res.data?.data || []
+    const [pRes, tRes] = await Promise.all([
+      personApi.list({ size: 1000 }),
+      certTypeApi.list()
+    ])
+    persons.value = pRes.data?.content || pRes.data?.records || pRes.data?.data || []
+    certTypes.value = tRes.data || []
   } catch (e) {
     // ignore
   }

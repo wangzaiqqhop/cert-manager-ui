@@ -55,5 +55,34 @@ export const certificateApi = {
   },
   previewHistoryNewFile(historyId) {
     return api.get(`/certificates/history-file/${historyId}/new`, { responseType: 'blob' })
+  },
+  importExcel(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+    return api.post('/certificates/import', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  listRecycleBin(params) {
+    return api.get('/certificates/recycle-bin', { params })
+  },
+  restore(id) {
+    return api.put(`/certificates/${id}/restore`)
+  },
+  permanentDelete(id) {
+    return api.delete(`/certificates/${id}/permanent`)
+  },
+  downloadTemplate() {
+    return api.get('/certificates/import/template', { responseType: 'blob' })
+  },
+  stats() {
+    return api.get('/certificates/stats')
+  },
+  importFiles(files) {
+    const formData = new FormData()
+    files.forEach(f => formData.append('files', f))
+    return api.post('/certificates/import-files', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   }
 }

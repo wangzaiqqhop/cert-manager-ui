@@ -6,7 +6,8 @@ const routes = [
     path: '/',
     component: () => import('../components/Layout.vue'),
     children: [
-      { path: '', redirect: '/certificates' },
+      { path: '', redirect: '/dashboard' },
+      { path: 'dashboard', name: 'Dashboard', component: () => import('../views/Dashboard.vue') },
       { path: 'certificates', name: 'CertificateList', component: () => import('../views/CertificateList.vue') },
       { path: 'certificates/upload', name: 'CertificateUpload', component: () => import('../views/CertificateUpload.vue') },
       { path: 'certificates/:id', name: 'CertificateDetail', component: () => import('../views/CertificateDetail.vue') },
@@ -14,6 +15,8 @@ const routes = [
       { path: 'admin/persons', name: 'PersonManage', component: () => import('../views/PersonManage.vue'), meta: { requiresAdmin: true } },
       { path: 'admin/users', name: 'UserManage', component: () => import('../views/UserManage.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'admin/audit-logs', name: 'AuditLog', component: () => import('../views/AuditLog.vue'), meta: { requiresAdmin: true } },
+      { path: 'admin/recycle-bin', name: 'RecycleBin', component: () => import('../views/RecycleBin.vue'), meta: { requiresAdmin: true } },
+      { path: 'admin/cert-types', name: 'CertTypeManage', component: () => import('../views/CertTypeManage.vue'), meta: { requiresAdmin: true } },
     ]
   }
 ]

@@ -12,6 +12,10 @@
         active-text-color="#409eff"
         router
       >
+        <el-menu-item index="/dashboard">
+          <el-icon><DataAnalysis /></el-icon>
+          <span>首页</span>
+        </el-menu-item>
         <el-menu-item index="/certificates">
           <el-icon><Document /></el-icon>
           <span>证书列表</span>
@@ -31,6 +35,14 @@
         <el-menu-item v-if="userStore.isAdmin" index="/admin/audit-logs">
           <el-icon><Operation /></el-icon>
           <span>审计日志</span>
+        </el-menu-item>
+        <el-menu-item v-if="userStore.isAdmin" index="/admin/recycle-bin">
+          <el-icon><Delete /></el-icon>
+          <span>回收站</span>
+        </el-menu-item>
+        <el-menu-item v-if="userStore.isAdmin" index="/admin/cert-types">
+          <el-icon><SetUp /></el-icon>
+          <span>证书类型</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
