@@ -1,20 +1,27 @@
 <template>
   <el-container style="height: 100vh">
     <!-- Left Sidebar -->
-    <el-aside width="220px" style="background: #304156">
-      <div style="height: 60px; line-height: 60px; text-align: center; color: #fff; font-size: 18px; font-weight: bold; background: #263445">
-        证书管理系统
+    <el-aside width="230px" class="sidebar-brand">
+      <!-- 品牌区域 -->
+      <div class="brand-logo-area">
+        <div class="sidebar-logo-wrap">
+          <img src="/images/logo.svg" alt="CHATONE 捷通" class="sidebar-logo-img" />
+        </div>
+        <div class="brand-logo-cn">证书管理系统</div>
+        <div class="brand-logo-en">Certificate Management</div>
       </div>
+
       <el-menu
         :default-active="activeMenu"
-        background-color="#304156"
-        text-color="#bfcbd9"
-        active-text-color="#409eff"
+        background-color="transparent"
+        text-color="rgba(255,255,255,0.65)"
+        active-text-color="#fff"
         router
+        class="sidebar-menu"
       >
         <el-menu-item index="/dashboard">
           <el-icon><DataAnalysis /></el-icon>
-          <span>首页</span>
+          <span>首页仪表板</span>
         </el-menu-item>
         <el-menu-item index="/certificates">
           <el-icon><Document /></el-icon>
@@ -57,44 +64,53 @@
 
     <el-container>
       <!-- Top Header -->
-      <el-header style="display: flex; align-items: center; justify-content: flex-end; background: #fff; border-bottom: 1px solid #e6e6e6; padding: 0 20px">
-        <div style="display: flex; align-items: center; gap: 16px">
+      <el-header class="header-brand">
+        <div class="header-left">
+          <span class="header-breadcrumb">证书管理系统</span>
+        </div>
+        <div class="header-right">
           <!-- 通知中心 -->
           <el-popover placement="bottom" :width="360" trigger="click" @show="loadNotifications">
             <template #reference>
               <el-badge :value="notifCount" :hidden="notifCount === 0" :max="99">
-                <el-icon style="font-size:20px; cursor:pointer; color:#606266"><Bell /></el-icon>
+                <el-icon class="header-icon-btn"><Bell /></el-icon>
               </el-badge>
             </template>
-            <div v-if="notifList.length === 0" style="text-align:center; padding:20px; color:#909399">暂无到期提醒</div>
-            <div v-else v-for="n in notifList" :key="n.id" style="padding:8px 0; border-bottom:1px solid #f0f0f0; cursor:pointer"
+            <div v-if="notifList.length === 0" style="text-align:center; padding:20px; color:#909399">
+              <el-icon style="font-size:40px; margin-bottom:8px; color:#c0c4cc"><SuccessFilled /></el-icon>
+              <div>暂无到期提醒</div>
+            </div>
+            <div v-else v-for="n in notifList" :key="n.id" class="notif-item"
                  @click="$router.push(`/certificates/${n.id}`)">
-              <div style="display:flex; justify-content:space-between; align-items:center">
-                <span style="font-size:13px; color:#303133">{{ n.name }}</span>
+              <div class="notif-header">
+                <span class="notif-name">{{ n.name }}</span>
                 <el-tag :type="n.daysLeft <= 7 ? 'danger' : 'warning'" size="small">{{ n.daysLeft }}天</el-tag>
               </div>
-              <div style="font-size:12px; color:#909399; margin-top:2px">
-                {{ n.personName }} · {{ n.validTo }}
-              </div>
+              <div class="notif-sub">{{ n.personName }} · {{ n.validTo }}</div>
             </div>
           </el-popover>
+
           <el-dropdown trigger="click" @command="handleCommand">
             <span class="user-dropdown">
-              <span style="color: #606266">{{ userStore.userInfo?.username || '' }}</span>
-              <el-icon style="margin-left: 4px"><ArrowDown /></el-icon>
+              <el-icon class="user-avatar"><UserFilled /></el-icon>
+              <span class="user-name">{{ userStore.userInfo?.username || '' }}</span>
+              <el-icon style="font-size:12px; color:#909399"><ArrowDown /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
+                <el-dropdown-item command="changePassword">
+                  <el-icon><Key /></el-icon>修改密码
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <el-button type="danger" size="small" @click="handleLogout">退出</el-button>
+
+          <el-button type="danger" size="small" plain @click="handleLogout">退出</el-button>
         </div>
       </el-header>
 
       <!-- Main Content -->
-      <el-main style="background: #f0f2f5">
+      <el-main class="main-brand">
         <router-view />
       </el-main>
     </el-container>
@@ -126,7 +142,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { userApi } from '../api/user'
 import { ElMessage } from 'element-plus'
-import { ArrowDown, Bell } from '@element-plus/icons-vue'
+import { ArrowDown, Bell, Key, UserFilled, SuccessFilled } from '@element-plus/icons-vue'
 import { certificateApi } from '../api/certificate'
 
 const route = useRoute()
@@ -211,13 +227,166 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
+.sidebar-brand {
+  background: var(--sidebar-bg) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+.sidebar-logo-img {
+  width: 130px;
+  height: auto;
+  display: block;
+}
+
+.sidebar-brand::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -30%;
+  width: 160%;
+  height: 160%;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(13, 110, 253, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(13, 110, 253, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.sidebar-menu {
+  border-right: none !important;
+  background: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar-menu .el-menu-item {
+  margin: 2px 8px;
+  border-radius: 8px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.sidebar-menu .el-menu-item:hover {
+  background: var(--sidebar-hover) !important;
+  color: #fff !important;
+}
+
+.sidebar-menu .el-menu-item.is-active {
+  background: var(--sidebar-active) !important;
+  color: #fff !important;
+  border-right: none !important;
+  font-weight: 600;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 0 24px;
+  height: 56px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-breadcrumb {
+  font-size: 14px;
+  color: #909399;
+  letter-spacing: 0.5px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-icon-btn {
+  font-size: 20px;
+  cursor: pointer;
+  color: #606266;
+  transition: color 0.2s;
+}
+
+.header-icon-btn:hover {
+  color: var(--brand-primary);
+}
+
 .user-dropdown {
   display: flex;
   align-items: center;
+  gap: 6px;
   cursor: pointer;
-  padding: 0 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
+
 .user-dropdown:hover {
-  color: #409eff;
+  background: #f5f7fa;
+}
+
+.user-avatar {
+  font-size: 20px;
+  color: var(--brand-primary);
+}
+
+.user-name {
+  font-size: 14px;
+  color: #303133;
+  font-weight: 500;
+}
+
+.main-brand {
+  background: var(--bg-page);
+  min-height: calc(100vh - 56px);
+}
+
+.notif-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.15s;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+
+.notif-item:last-child { border-bottom: none; }
+
+.notif-item:hover { background: #f5f7fa; }
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notif-name {
+  font-size: 13px;
+  color: #303133;
+  font-weight: 500;
+}
+
+.notif-sub {
+  font-size: 12px;
+  color: #909399;
+  margin-top: 4px;
 }
 </style>

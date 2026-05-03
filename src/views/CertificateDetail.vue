@@ -203,7 +203,7 @@
           :on-change="handleUploadFileChange"
           drag
         >
-          <el-icon style="font-size: 40px; color: #409eff"><UploadFilled /></el-icon>
+          <el-icon style="font-size: 40px; color: var(--brand-primary)"><UploadFilled /></el-icon>
           <div style="margin-top: 8px; color: #606266">
             点击或拖拽上传 {{ uploadFileType === 'JPG' ? 'JPG/PNG 图片' : 'PDF 文件' }}
           </div>

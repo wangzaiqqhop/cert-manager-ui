@@ -1,3 +1,5 @@
+@import './brand.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -5,8 +7,10 @@
 }
 
 body {
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
-  background-color: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .page-container {
@@ -15,4 +19,113 @@ body {
 
 .toolbar {
   margin-bottom: 16px;
+}
+
+/* 统一卡片样式 */
+.el-card {
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  border: none;
+}
+
+.el-card:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.el-card__header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 20px;
+}
+
+.el-card__body {
+  padding: 20px;
+}
+
+/* 按钮优化 */
+.el-button {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.el-button--primary {
+  background: var(--brand-gradient);
+  border: none;
+}
+
+.el-button--primary:hover {
+  opacity: 0.9;
+}
+
+/* 表格优化 */
+.el-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.el-table th.el-table__cell {
+  background: #f5f7fa;
+  color: var(--brand-dark);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* 分页优化 */
+.el-pagination {
+  --el-color-primary: var(--brand-primary);
+}
+
+/* 标签优化 */
+.el-tag {
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* 输入框/选择框聚焦 */
+.el-input__wrapper:focus-within,
+.el-textarea__inner:focus-within,
+.el-select .el-input__wrapper:focus-within {
+  box-shadow: 0 0 0 1px var(--brand-primary) inset;
+}
+
+/* 菜单选中态 */
+.el-menu-item.is-active {
+  background-color: var(--sidebar-active) !important;
+  color: #fff !important;
+  border-right: 3px solid var(--brand-primary);
+}
+
+/* 对话框 */
+.el-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.el-dialog__header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 18px 24px;
+}
+
+.el-dialog__body {
+  padding: 24px;
+}
+
+/* Tabs 优化 */
+.el-tabs__active-bar {
+  background-color: var(--brand-primary);
+}
+
+.el-tabs__item.is-active {
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
+/* Alert 圆角 */
+.el-alert {
+  border-radius: 8px;
+}
+
+/* Badge */
+.el-badge__content {
+  border: none;
 }

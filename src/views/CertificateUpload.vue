@@ -57,8 +57,8 @@
             accept=".pdf,.jpg,.jpeg,.png"
             drag
           >
-            <el-icon style="font-size: 40px; color: #409eff"><UploadFilled /></el-icon>
-            <div style="margin-top: 8px; color: #606266">将文件拖到此处，或<em style="color: #409eff">点击上传</em></div>
+            <el-icon style="font-size: 40px; color: var(--brand-primary)"><UploadFilled /></el-icon>
+            <div style="margin-top: 8px; color: #606266">将文件拖到此处，或<em style="color: var(--brand-primary)">点击上传</em></div>
             <template #tip>
               <div style="color: #909399; font-size: 12px; margin-top: 4px">支持 PDF/JPG/PNG，可同时上传多份（同一类型限一份），大小不超过 50MB</div>
             </template>

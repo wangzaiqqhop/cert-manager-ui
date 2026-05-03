@@ -1,0 +1,191 @@
+:root {
+  --brand-primary: #00A0E9;
+  --brand-primary-dark: #0088cc;
+  --brand-primary-light: #e8f0fe;
+  --brand-dark: #0a2540;
+  --brand-dark-secondary: #0b1e3a;
+  --brand-accent: #dc3545;
+  --brand-gradient: linear-gradient(135deg, #00A0E9, #0088cc);
+  --brand-gradient-dark: linear-gradient(135deg, #091a30, #0b1e3a);
+  --sidebar-bg: #0b1e3a;
+  --sidebar-hover: rgba(255, 255, 255, 0.08);
+  --sidebar-active: rgba(13, 110, 253, 0.25);
+  --bg-page: #f0f3f7;
+  --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 品牌 Logo 区域 */
+.brand-logo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  background: var(--brand-gradient-dark);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-logo-area::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 70% 50%, rgba(13, 110, 253, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.brand-logo-icon {
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0, 160, 233, 0.3);
+  padding: 8px;
+}
+
+.brand-logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-logo-cn {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.brand-logo-en {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 2px;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+/* 卡片头部品牌化 */
+.brand-card-header {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--brand-dark);
+  padding-left: 12px;
+  border-left: 3px solid var(--brand-primary);
+}
+
+/* 统计卡片 */
+.stat-card-brand {
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border-top: none !important;
+  overflow: hidden;
+}
+
+.stat-card-brand:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+.stat-card-brand .stat-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.stat-card-brand .stat-body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-card-brand .stat-num {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--brand-dark);
+  line-height: 1;
+}
+
+.stat-card-brand .stat-label {
+  font-size: 13px;
+  color: #909399;
+  margin-top: 6px;
+}
+
+/* 登录页 */
+.login-wrapper-brand {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a2540 0%, #0d3b66 40%, #00A0E9 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-wrapper-brand::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+  top: -200px;
+  right: -200px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-wrapper-brand::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.login-card-brand {
+  width: 420px;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.login-card-brand .el-card__body {
+  padding: 40px 36px;
+}
+
+/* 页面容器 */
+.page-container-brand {
+  padding: 20px;
+}
+
+/* Element Plus 主题色覆盖 */
+:root {
+  --el-color-primary: var(--brand-primary);
+  --el-color-primary-light-3: #4dc7f2;
+  --el-color-primary-light-5: #80d9f6;
+  --el-color-primary-light-7: #b3eafa;
+  --el-color-primary-light-8: #cceffc;
+  --el-color-primary-light-9: #e6f7fd;
+  --el-color-primary-dark-2: #0088cc;
+  --el-border-radius-base: 6px;
+  --el-border-radius-round: 10px;
+}

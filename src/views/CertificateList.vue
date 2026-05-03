@@ -128,7 +128,7 @@
         :on-remove="handleFileRemove"
         drag
       >
-        <el-icon style="font-size: 36px; color: #409eff"><Upload /></el-icon>
+        <el-icon style="font-size: 36px; color: var(--brand-primary)"><Upload /></el-icon>
         <div style="margin-top: 8px">将扫描件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div style="margin-top: 4px; font-size: 12px; color: #909399">
@@ -187,7 +187,7 @@
         :on-remove="() => importFile = null"
         drag
       >
-        <el-icon style="font-size: 36px; color: #409eff"><Upload /></el-icon>
+        <el-icon style="font-size: 36px; color: var(--brand-primary)"><Upload /></el-icon>
         <div style="margin-top: 8px">将填好的 Excel 文件拖到此处，或<em>点击上传</em></div>
         <template #tip>
           <div style="margin-top: 4px; font-size: 12px; color: #909399">
