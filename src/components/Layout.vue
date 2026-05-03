@@ -44,13 +44,40 @@
           <el-icon><SetUp /></el-icon>
           <span>证书类型</span>
         </el-menu-item>
+        <el-menu-item v-if="userStore.isAdmin" index="/admin/email-logs">
+          <el-icon><Message /></el-icon>
+          <span>邮件日志</span>
+        </el-menu-item>
+        <el-menu-item v-if="userStore.isSuperAdmin" index="/admin/system-config">
+          <el-icon><Setting /></el-icon>
+          <span>系统配置</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
 
     <el-container>
       <!-- Top Header -->
       <el-header style="display: flex; align-items: center; justify-content: flex-end; background: #fff; border-bottom: 1px solid #e6e6e6; padding: 0 20px">
-        <div style="display: flex; align-items: center; gap: 12px">
+        <div style="display: flex; align-items: center; gap: 16px">
+          <!-- 通知中心 -->
+          <el-popover placement="bottom" :width="360" trigger="click" @show="loadNotifications">
+            <template #reference>
+              <el-badge :value="notifCount" :hidden="notifCount === 0" :max="99">
+                <el-icon style="font-size:20px; cursor:pointer; color:#606266"><Bell /></el-icon>
+              </el-badge>
+            </template>
+            <div v-if="notifList.length === 0" style="text-align:center; padding:20px; color:#909399">暂无到期提醒</div>
+            <div v-else v-for="n in notifList" :key="n.id" style="padding:8px 0; border-bottom:1px solid #f0f0f0; cursor:pointer"
+                 @click="$router.push(`/certificates/${n.id}`)">
+              <div style="display:flex; justify-content:space-between; align-items:center">
+                <span style="font-size:13px; color:#303133">{{ n.name }}</span>
+                <el-tag :type="n.daysLeft <= 7 ? 'danger' : 'warning'" size="small">{{ n.daysLeft }}天</el-tag>
+              </div>
+              <div style="font-size:12px; color:#909399; margin-top:2px">
+                {{ n.personName }} · {{ n.validTo }}
+              </div>
+            </div>
+          </el-popover>
           <el-dropdown trigger="click" @command="handleCommand">
             <span class="user-dropdown">
               <span style="color: #606266">{{ userStore.userInfo?.username || '' }}</span>
@@ -94,12 +121,13 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import { userApi } from '../api/user'
 import { ElMessage } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, Bell } from '@element-plus/icons-vue'
+import { certificateApi } from '../api/certificate'
 
 const route = useRoute()
 const router = useRouter()
@@ -110,6 +138,20 @@ const activeMenu = computed(() => route.path)
 function handleLogout() {
   userStore.logout()
   router.push('/login')
+}
+
+const notifCount = ref(0)
+const notifList = ref([])
+
+onMounted(() => loadNotifications())
+
+async function loadNotifications() {
+  try {
+    const res = await certificateApi.stats()
+    const list = res.data?.expiringList || []
+    notifList.value = list
+    notifCount.value = list.length
+  } catch (e) { /* ignore */ }
 }
 
 const dialogVisible = ref(false)

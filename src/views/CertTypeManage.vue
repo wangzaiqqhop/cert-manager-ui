@@ -8,10 +8,10 @@
         </div>
       </template>
       <el-table :data="tableData" stripe>
-        <el-table-column prop="code" label="编码" width="200" />
-        <el-table-column prop="name" label="名称" width="150" />
+        <el-table-column prop="code" label="编码" min-width="160" />
+        <el-table-column prop="name" label="名称" min-width="120" />
         <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
-        <el-table-column label="操作" width="140" align="center">
+        <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" link @click="openDialog(row)">编辑</el-button>
             <el-button type="danger" size="small" link @click="handleDelete(row)">删除</el-button>

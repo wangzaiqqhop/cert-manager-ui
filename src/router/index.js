@@ -17,6 +17,8 @@ const routes = [
       { path: 'admin/audit-logs', name: 'AuditLog', component: () => import('../views/AuditLog.vue'), meta: { requiresAdmin: true } },
       { path: 'admin/recycle-bin', name: 'RecycleBin', component: () => import('../views/RecycleBin.vue'), meta: { requiresAdmin: true } },
       { path: 'admin/cert-types', name: 'CertTypeManage', component: () => import('../views/CertTypeManage.vue'), meta: { requiresAdmin: true } },
+      { path: 'admin/email-logs', name: 'EmailLog', component: () => import('../views/EmailLog.vue'), meta: { requiresAdmin: true } },
+      { path: 'admin/system-config', name: 'SystemConfig', component: () => import('../views/SystemConfig.vue'), meta: { requiresSuperAdmin: true } },
     ]
   }
 ]

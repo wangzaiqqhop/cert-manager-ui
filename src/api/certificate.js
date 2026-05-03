@@ -72,6 +72,7 @@ export const certificateApi = {
   permanentDelete(id) {
     return api.delete(`/certificates/${id}/permanent`)
   },
+  emailLogs(params) { return api.get('/certificates/email-logs', { params }) },
   downloadTemplate() {
     return api.get('/certificates/import/template', { responseType: 'blob' })
   },
