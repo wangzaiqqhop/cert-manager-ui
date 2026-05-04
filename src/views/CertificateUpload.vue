@@ -87,7 +87,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { certificateApi } from '../api/certificate'
 import { personApi } from '../api/person'
 import { certTypeApi } from '../api/certType'
@@ -158,6 +158,29 @@ async function handleSubmit() {
   if (selectedFiles.value.length === 0) {
     ElMessage.warning('请上传至少一个证书文件')
     return
+  }
+
+  // 判重检查
+  try {
+    const dupRes = await certificateApi.checkDuplicate({
+      serialNumber: form.serialNumber || '',
+      issuer: form.issuer || '',
+      name: form.name || '',
+      type: form.type || '',
+      personId: form.personId ? String(form.personId) : ''
+    })
+    const dupes = dupRes.data || []
+    if (dupes.length > 0) {
+      const names = dupes.map(d => `「${d.name}」(${d.serialNumber || '无编号'})`).join('、')
+      await ElMessageBox.confirm(
+        `系统中已存在疑似重复证书：${names}，是否继续上传？`,
+        '重复提醒',
+        { confirmButtonText: '继续上传', cancelButtonText: '取消', type: 'warning' }
+      )
+    }
+  } catch (e) {
+    if (e === 'cancel' || e === 'close') return
+    // 接口报错不阻塞上传
   }
 
   loading.value = true

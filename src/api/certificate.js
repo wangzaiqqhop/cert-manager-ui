@@ -79,6 +79,9 @@ export const certificateApi = {
   stats() {
     return api.get('/certificates/stats')
   },
+  checkDuplicate(data) {
+    return api.post('/certificates/check-duplicate', data)
+  },
   importFiles(files) {
     const formData = new FormData()
     files.forEach(f => formData.append('files', f))

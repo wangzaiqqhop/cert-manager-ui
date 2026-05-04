@@ -3,7 +3,12 @@
     <el-card v-loading="loading">
       <template #header>
         <div style="display: flex; justify-content: space-between; align-items: center">
-          <span style="font-size: 16px; font-weight: bold">证书详情</span>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <el-button text @click="$router.push('/certificates')">
+              <el-icon><ArrowLeft /></el-icon>返回列表
+            </el-button>
+            <span style="font-size: 16px; font-weight: bold">证书详情</span>
+          </div>
           <div v-if="!detail?.deleted" style="display: flex; gap: 8px">
             <el-button type="warning" @click="$router.push(`/certificates/${route.params.id}/edit`)">编辑</el-button>
             <el-button type="success" @click="openDownload">下载</el-button>
@@ -227,7 +232,7 @@ import StatusBadge from '../components/StatusBadge.vue'
 import FilePreview from '../components/FilePreview.vue'
 import DownloadDialog from '../components/DownloadDialog.vue'
 import { certTypeLabel } from '../utils/certType'
-import { UploadFilled, Warning } from '@element-plus/icons-vue'
+import { UploadFilled, Warning, ArrowLeft } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()

@@ -204,11 +204,13 @@
         >
           <template #title>
             共 {{ importResult.total }} 条，成功 {{ importResult.success }} 条
+            <span v-if="importResult.skipped">，跳过 {{ importResult.skipped }} 条（重复）</span>
             <span v-if="importResult.errors?.length">，失败 {{ importResult.errors.length }} 条</span>
           </template>
         </el-alert>
         <div v-if="importResult.errors?.length" style="margin-top: 8px; max-height: 160px; overflow-y: auto">
-          <div v-for="(err, i) in importResult.errors" :key="i" style="font-size: 13px; color: #e6a23c; line-height: 1.8">
+          <div v-for="(err, i) in importResult.errors" :key="i" style="font-size: 13px; line-height: 1.8"
+               :style="{ color: err.message.startsWith('重复跳过') ? '#e6a23c' : '#f56c6c' }">
             第 {{ err.row }} 行：{{ err.message }}
           </div>
         </div>
@@ -216,7 +218,7 @@
 
       <template #footer>
         <el-button @click="importVisible = false">关闭</el-button>
-        <el-button type="primary" :loading="importing" :disabled="!importFile" @click="handleImport">
+        <el-button v-if="!importResult" type="primary" :loading="importing" :disabled="!importFile" @click="handleImport">
           开始导入
         </el-button>
       </template>
