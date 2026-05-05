@@ -37,7 +37,7 @@
         <div>
           <div style="font-size:12px;color:#909399;margin-bottom:4px">证书状态</div>
           <el-select v-model="query.status" placeholder="全部" clearable style="width:180px">
-            <el-option label="有效（含即将过期）" value="VALID" />
+            <el-option label="有效" value="VALID" />
             <el-option label="即将过期" value="EXPIRING_SOON" />
             <el-option label="已过期" value="EXPIRED" />
           </el-select>

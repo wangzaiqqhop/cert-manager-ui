@@ -2,6 +2,9 @@
   <div class="page-container">
     <el-card>
       <template #header>
+        <!---flex: 自适应弹性布局  
+        justify-content ： 横向布局    
+        align-items：纵向布局 -->
         <div style="display: flex; justify-content: space-between; align-items: center">
           <span style="font-size: 16px; font-weight: bold">审计日志</span>
           <el-button type="success" @click="handleExport" :loading="exporting">
@@ -11,6 +14,7 @@
       </template>
 
       <!-- Filter Toolbar -->
+      <!-- flex-wrap：自动换行 -->
       <div class="toolbar" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center">
         <el-date-picker
           v-model="dateRange"
@@ -22,7 +26,8 @@
           style="width: 260px"
           @change="loadData"
         />
-
+        <!--v-model 用来绑定变量
+        clearable style 清除按钮-->
         <el-select v-model="queryParams.action" placeholder="操作类型" clearable style="width: 160px" @change="loadData">
           <el-option label="CERT_UPLOAD" value="CERT_UPLOAD" />
           <el-option label="CERT_UPDATE" value="CERT_UPDATE" />
@@ -54,7 +59,11 @@
         <el-button @click="resetQuery">重置</el-button>
       </div>
 
-      <!-- Table -->
+      <!-- Table 
+       v-loading ： 表格等组件专用的加载器
+       stripe ：斑马纹，每行颜色交替
+       style="margin-top: 16px" 定义行间距
+       -->
       <el-table :data="tableData" v-loading="loading" stripe style="margin-top: 16px">
         <el-table-column prop="username" label="用户名" width="130" />
         <el-table-column prop="action" label="操作" width="100" align="center">

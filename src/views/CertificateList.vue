@@ -156,7 +156,7 @@
 
       <template #footer>
         <el-button @click="fileUploadVisible = false">关闭</el-button>
-        <el-button type="primary" :loading="uploadingFiles" :disabled="uploadFilesList.length === 0" @click="handleUploadFiles">
+        <el-button v-if="!fileMatchResult" type="primary" :loading="uploadingFiles" :disabled="uploadFilesList.length === 0" @click="handleUploadFiles">
           开始匹配上传
         </el-button>
       </template>
