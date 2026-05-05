@@ -88,5 +88,16 @@ export const certificateApi = {
     return api.post('/certificates/import-files', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
+  },
+  queryByNames(data) {
+    return api.post('/certificates/query-by-names', data)
+  },
+  listNames() {
+    return api.get('/certificates/names')
+  },
+  batchDownload(data) {
+    return api.post('/certificates/batch-download', data, {
+      responseType: 'blob'
+    })
   }
 }

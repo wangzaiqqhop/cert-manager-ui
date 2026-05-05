@@ -1,0 +1,42 @@
+<h2>证书类型选择 — 多选下拉框</h2>
+<p class="subtitle">使用 Element Plus el-select multiple 组件</p>
+
+<div class="mockup">
+  <div class="mockup-header">点击展开效果</div>
+  <div class="mockup-body">
+    <!-- 已选标签 -->
+    <div style="border:1px solid #00A0E9;border-radius:6px;padding:6px 10px;min-height:36px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;cursor:pointer;background:#fff">
+      <span style="background:#e6f7fd;color:#00A0E9;padding:2px 8px;border-radius:4px;font-size:12px;display:flex;align-items:center;gap:4px">
+        安全员证书 <span style="cursor:pointer">&times;</span>
+      </span>
+      <span style="background:#e6f7fd;color:#00A0E9;padding:2px 8px;border-radius:4px;font-size:12px;display:flex;align-items:center;gap:4px">
+        电工证 <span style="cursor:pointer">&times;</span>
+      </span>
+      <span style="color:#c0c4cc;font-size:12px">请选择证书类型</span>
+      <span style="margin-left:auto;color:#c0c4cc">&#x25BC;</span>
+    </div>
+
+    <!-- 下拉面板 -->
+    <div style="border:1px solid #e4e7ed;border-radius:6px;margin-top:4px;padding:8px;box-shadow:0 2px 12px rgba(0,0,0,0.1);background:#fff;max-width:360px">
+      <div style="padding:6px 8px;display:flex;align-items:center;gap:8px;cursor:pointer;border-radius:4px">
+        <input type="checkbox" checked style="accent-color:#00A0E9"> <span>安全员证书</span>
+      </div>
+      <div style="padding:6px 8px;display:flex;align-items:center;gap:8px;cursor:pointer;border-radius:4px">
+        <input type="checkbox" checked style="accent-color:#00A0E9"> <span>电工证</span>
+      </div>
+      <div style="padding:6px 8px;display:flex;align-items:center;gap:8px;cursor:pointer;border-radius:4px">
+        <input type="checkbox" style="accent-color:#00A0E9"> <span>焊工证</span>
+      </div>
+      <div style="padding:6px 8px;display:flex;align-items:center;gap:8px;cursor:pointer;border-radius:4px">
+        <input type="checkbox" style="accent-color:#00A0E9"> <span>一建证书</span>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;font-size:13px;color:#606266">
+      <strong>交互逻辑：</strong><br>
+      • 下拉勾选 → 标签显示在输入框中<br>
+      • 点击标签 × 可移除<br>
+      • 支持一键清空
+    </div>
+  </div>
+</div>

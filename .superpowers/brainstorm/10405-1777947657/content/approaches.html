@@ -1,0 +1,72 @@
+<h2>多证书查询功能 — 三种实现方案</h2>
+<p class="subtitle">管理员灵活按需查询，选择证书类型组合，一键下载加水印文件</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>独立页面（推荐）</h3>
+      <p>新增 /certificates/multi-query 路由，完整页面布局</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4>
+          <ul>
+            <li>空间充裕，筛选条件、结果展示、下载操作分区清晰</li>
+            <li>不需要弹窗滚动，适合结果多的情况</li>
+            <li>可扩展性强，后续加功能不拥挤</li>
+          </ul>
+        </div>
+        <div class="cons"><h4>Cons</h4>
+          <ul>
+            <li>多一个菜单项和路由</li>
+            <li>需要离开证书列表页</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>大弹窗模式</h3>
+      <p>在证书列表页点击按钮，打开全屏 Dialog</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4>
+          <ul>
+            <li>不需要新路由，实现快</li>
+            <li>和证书列表页联动方便</li>
+          </ul>
+        </div>
+        <div class="cons"><h4>Cons</h4>
+          <ul>
+            <li>结果多时弹窗内滚动体验差</li>
+            <li>筛选+结果+下载全挤在一个弹窗里</li>
+            <li>后续加功能空间受限</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Dashboard 小组件</h3>
+      <p>在首页仪表板增加一个查询卡片</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4>
+          <ul>
+            <li>入口方便，打开首页就能用</li>
+          </ul>
+        </div>
+        <div class="cons"><h4>Cons</h4>
+          <ul>
+            <li>Dashboard 已经比较满（统计卡片+过期列表+类型分布）</li>
+            <li>空间太小，结果展示受限</li>
+            <li>功能混杂，仪表板职责不清</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

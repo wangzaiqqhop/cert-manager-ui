@@ -1,0 +1,1 @@
+import{a as r}from"./axios-b7b397fd.js";const p={list(e){return r.get("/persons",{params:e})},getById(e){return r.get(`/persons/${e}`)},create(e){return r.post("/persons",e)},update(e,t){return r.put(`/persons/${e}`,t)},remove(e){return r.delete(`/persons/${e}`)}};export{p};

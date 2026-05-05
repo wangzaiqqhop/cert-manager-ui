@@ -61,7 +61,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { certificateApi } from '../api/certificate'
 import { personApi } from '../api/person'
 import { certTypeApi } from '../api/certType'
@@ -138,6 +138,28 @@ async function loadData() {
 async function handleSubmit() {
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
+
+  // 判重检查（排除自身）
+  try {
+    const dupRes = await certificateApi.checkDuplicate({
+      serialNumber: form.serialNumber || '',
+      issuer: form.issuer || '',
+      name: form.name || '',
+      type: form.type || '',
+      personId: form.personId ? String(form.personId) : ''
+    })
+    const otherDupes = (dupRes.data || []).filter(d => d.id !== Number(route.params.id))
+    if (otherDupes.length > 0) {
+      const names = otherDupes.map(d => `「${d.name}」(${d.serialNumber || '无编号'})`).join('、')
+      await ElMessageBox.confirm(
+        `修改后与已有证书重复：${names}，是否继续保存？`,
+        '重复提醒',
+        { confirmButtonText: '继续保存', cancelButtonText: '取消', type: 'warning' }
+      )
+    }
+  } catch (e) {
+    if (e === 'cancel' || e === 'close') return
+  }
 
   saving.value = true
   try {

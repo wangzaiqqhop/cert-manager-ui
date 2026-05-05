@@ -12,6 +12,7 @@ const routes = [
       { path: 'certificates/upload', name: 'CertificateUpload', component: () => import('../views/CertificateUpload.vue') },
       { path: 'certificates/:id', name: 'CertificateDetail', component: () => import('../views/CertificateDetail.vue') },
       { path: 'certificates/:id/edit', name: 'CertificateEdit', component: () => import('../views/CertificateEdit.vue') },
+      { path: 'certificates/multi-query', name: 'CertificateMultiQuery', component: () => import('../views/CertificateMultiQuery.vue'), meta: { requiresAdmin: true } },
       { path: 'admin/persons', name: 'PersonManage', component: () => import('../views/PersonManage.vue'), meta: { requiresAdmin: true } },
       { path: 'admin/users', name: 'UserManage', component: () => import('../views/UserManage.vue'), meta: { requiresSuperAdmin: true } },
       { path: 'admin/audit-logs', name: 'AuditLog', component: () => import('../views/AuditLog.vue'), meta: { requiresAdmin: true } },

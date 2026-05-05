@@ -31,6 +31,10 @@
           <el-icon><Upload /></el-icon>
           <span>上传证书</span>
         </el-menu-item>
+        <el-menu-item v-if="userStore.isAdmin" index="/certificates/multi-query">
+          <el-icon><Search /></el-icon>
+          <span>多证书查询</span>
+        </el-menu-item>
         <el-menu-item v-if="userStore.isAdmin" index="/admin/persons">
           <el-icon><User /></el-icon>
           <span>归属人管理</span>

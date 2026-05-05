@@ -1,0 +1,62 @@
+<h2>页面布局方案</h2>
+<p class="subtitle">筛选区 + 结果区 + 下载区 的排版</p>
+
+<div class="split">
+  <div class="mockup" data-choice="layout-a" onclick="toggleSelect(this)">
+    <div class="mockup-header">A: 上下分区（推荐）</div>
+    <div class="mockup-body">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;padding:12px;background:#f5f7fa;border-radius:6px;margin-bottom:10px">
+        <mock-tag>类型*</mock-tag><mock-tag>状态</mock-tag><mock-tag>到期≥</mock-tag><mock-tag>姓名</mock-tag>
+        <button class="mock-button" style="margin-left:auto">查询</button>
+      </div>
+      <div style="border:1px dashed #c0c4cc;border-radius:6px;padding:16px;margin-bottom:10px;min-height:180px">
+        <div style="font-weight:600;margin-bottom:8px">共 3 人</div>
+        <div style="background:#fff;border:1px solid #eee;border-radius:4px;padding:8px 12px;margin-bottom:6px">
+          <strong>张三</strong> (GH001) · 工程部<br>
+          <span style="color:#67c23a">安全员证书</span> SN20240001 · 有效 · 2027-01-15 · <span class="label">JPG</span> <span class="label">PDF</span><br>
+          <span style="color:#67c23a">电工证</span> SN20240005 · 有效 · 2026-12-31 · <span class="label">JPG</span>
+        </div>
+        <div style="background:#fff;border:1px solid #eee;border-radius:4px;padding:8px 12px">
+          <strong>李四</strong> (GH002) · 工程部<br>
+          <span style="color:#67c23a">安全员证书</span> SN20240002 · 有效 · 2027-03-20 · <span class="label">JPG</span> <span class="label">PDF</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;padding:12px;background:#f5f7fa;border-radius:6px">
+        <span>水印:</span> <input class="mock-input" placeholder="仅供XX备案使用" style="width:180px">
+        <span>文件:</span> <span class="label">JPG</span> <span class="label">PDF</span>
+        <button class="mock-button" style="margin-left:auto;background:#00A0E9;color:#fff">一键下载 ZIP</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup" data-choice="layout-b" onclick="toggleSelect(this)">
+    <div class="mockup-header">B: 左侧筛选 + 右侧结果</div>
+    <div class="mockup-body">
+      <div style="display:flex;gap:10px">
+        <div style="width:200px;flex-shrink:0;background:#f5f7fa;border-radius:6px;padding:12px">
+          <div style="font-weight:600;margin-bottom:8px">筛选条件</div>
+          <mock-tag style="display:block;margin-bottom:4px">证书类型*</mock-tag>
+          <mock-tag style="display:block;margin-bottom:4px">状态</mock-tag>
+          <mock-tag style="display:block;margin-bottom:4px">到期≥</mock-tag>
+          <mock-tag style="display:block;margin-bottom:4px">姓名</mock-tag>
+          <button class="mock-button" style="width:100%;margin-top:8px">查询</button>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px dashed #ccc">
+            <div style="font-weight:600;margin-bottom:4px;font-size:12px">下载</div>
+            <span style="font-size:11px">水印:</span> <input class="mock-input" style="width:100%;margin:4px 0;font-size:11px" placeholder="水印文字">
+            <span class="label" style="font-size:10px">JPG</span> <span class="label" style="font-size:10px">PDF</span>
+            <button class="mock-button" style="width:100%;margin-top:6px;background:#00A0E9;color:#fff;font-size:11px">下载ZIP</button>
+          </div>
+        </div>
+        <div style="flex:1;border:1px dashed #c0c4cc;border-radius:6px;padding:12px;min-height:240px">
+          <div style="font-weight:600;margin-bottom:8px">共 3 人</div>
+          <div style="background:#fff;border:1px solid #eee;border-radius:4px;padding:6px 10px;margin-bottom:4px;font-size:12px">
+            <strong>张三</strong> (GH001) · 工程部 · 安全员证书 · 电工证
+          </div>
+          <div style="background:#fff;border:1px solid #eee;border-radius:4px;padding:6px 10px;font-size:12px">
+            <strong>李四</strong> (GH002) · 工程部 · 安全员证书
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

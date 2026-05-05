@@ -1,0 +1,127 @@
+<h2>页面完整设计 — 多证书人员查询</h2>
+<p class="subtitle">路径: /certificates/multi-query &nbsp;|&nbsp; 仅管理员可见</p>
+
+<div class="mockup">
+  <div class="mockup-header">页面效果</div>
+  <div class="mockup-body">
+
+    <!-- 页面标题 -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <span style="color:#00A0E9;cursor:pointer;font-size:14px">← 返回</span>
+      <span style="font-size:16px;font-weight:700;color:#0a2540">多证书人员查询</span>
+    </div>
+
+    <!-- 筛选区 -->
+    <div class="placeholder" style="margin-bottom:16px">
+      <div style="font-weight:600;margin-bottom:10px;color:#0a2540">筛选条件</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <div>
+          <div class="label" style="margin-bottom:2px">证书类型 *</div>
+          <select multiple style="min-width:240px;min-height:36px;border:1px solid #dcdfe6;border-radius:6px;padding:6px">
+            <option>安全员证书</option>
+            <option>电工证</option>
+            <option>焊工证</option>
+          </select>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom:2px">证书状态</div>
+          <select style="min-width:130px;min-height:36px;border:1px solid #dcdfe6;border-radius:6px;padding:6px">
+            <option>全部</option><option>有效</option><option>即将过期</option><option>已过期</option>
+          </select>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom:2px">到期不早于</div>
+          <input class="mock-input" placeholder="2026-06-01" style="width:130px">
+        </div>
+        <div>
+          <div class="label" style="margin-bottom:2px">姓名搜索</div>
+          <input class="mock-input" placeholder="姓名关键词" style="width:150px">
+        </div>
+        <button class="mock-button" style="margin-top:18px;background:#00A0E9;color:#fff;height:36px;padding:0 24px">查询</button>
+      </div>
+    </div>
+
+    <!-- 结果区 -->
+    <div class="placeholder" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-weight:600;color:#0a2540">查询结果：共 <strong>3</strong> 人</span>
+        <span style="font-size:12px;color:#909399">匹配证书: 安全员证书 + 电工证</span>
+      </div>
+
+      <!-- 人员1 -->
+      <div style="background:#fff;border:1px solid #e8eaed;border-radius:8px;margin-bottom:10px;overflow:hidden">
+        <div style="background:#f5f7fa;padding:10px 16px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <strong style="font-size:14px;color:#0a2540">张三</strong>
+            <span style="color:#909399;margin-left:8px">GH001</span>
+            <span class="label" style="margin-left:8px">工程部</span>
+          </div>
+          <span style="font-size:11px;color:#c0c4cc">2 本证书</span>
+        </div>
+        <div style="padding:10px 16px">
+          <table style="width:100%;font-size:13px;border-collapse:collapse">
+            <tr style="border-bottom:1px solid #f0f0f0">
+              <td style="padding:4px 8px"><span style="color:#67c23a;font-weight:500">安全员证书</span></td>
+              <td style="padding:4px 8px;color:#606266">SN20240001</td>
+              <td style="padding:4px 8px"><span style="background:#e8f8ee;color:#67c23a;padding:1px 6px;border-radius:3px;font-size:11px">有效</span></td>
+              <td style="padding:4px 8px;color:#606266">2027-01-15</td>
+              <td style="padding:4px 8px"><span class="label">JPG</span> <span class="label">PDF</span></td>
+            </tr>
+            <tr>
+              <td style="padding:4px 8px"><span style="color:#67c23a;font-weight:500">电工证</span></td>
+              <td style="padding:4px 8px;color:#606266">SN20240005</td>
+              <td style="padding:4px 8px"><span style="background:#e8f8ee;color:#67c23a;padding:1px 6px;border-radius:3px;font-size:11px">有效</span></td>
+              <td style="padding:4px 8px;color:#606266">2026-12-31</td>
+              <td style="padding:4px 8px"><span class="label">JPG</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 人员2 -->
+      <div style="background:#fff;border:1px solid #e8eaed;border-radius:8px;overflow:hidden">
+        <div style="background:#f5f7fa;padding:10px 16px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <strong style="font-size:14px;color:#0a2540">李四</strong>
+            <span style="color:#909399;margin-left:8px">GH002</span>
+            <span class="label" style="margin-left:8px">工程部</span>
+          </div>
+          <span style="font-size:11px;color:#c0c4cc">1 本证书</span>
+        </div>
+        <div style="padding:10px 16px">
+          <table style="width:100%;font-size:13px;border-collapse:collapse">
+            <tr>
+              <td style="padding:4px 8px"><span style="color:#67c23a;font-weight:500">安全员证书</span></td>
+              <td style="padding:4px 8px;color:#606266">SN20240002</td>
+              <td style="padding:4px 8px"><span style="background:#e8f8ee;color:#67c23a;padding:1px 6px;border-radius:3px;font-size:11px">有效</span></td>
+              <td style="padding:4px 8px;color:#606266">2027-03-20</td>
+              <td style="padding:4px 8px"><span class="label">JPG</span> <span class="label">PDF</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 下载区 -->
+    <div class="placeholder" style="background:#f0f6ff;border:1px solid #b3d9ff">
+      <div style="font-weight:600;margin-bottom:10px;color:#0a2540">一键下载</div>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div>
+          <span style="color:#606266">水印文字:</span>
+          <input class="mock-input" placeholder="仅供XX备案使用" style="width:200px;margin-left:4px">
+        </div>
+        <div>
+          <span style="color:#606266;margin-right:4px">文件类型:</span>
+          <label style="margin-right:8px"><input type="checkbox" checked> JPG</label>
+          <label><input type="checkbox" checked> PDF</label>
+        </div>
+        <button class="mock-button" style="background:#00A0E9;color:#fff;padding:0 24px;height:40px;font-size:14px">
+          一键下载全部证书 (ZIP)
+        </button>
+      </div>
+      <div style="font-size:11px;color:#909399;margin-top:8px">
+        将打包下载 3 人共 5 本证书的文件，按 人员编号_姓名/证书名称.ext 命名
+      </div>
+    </div>
+  </div>
+</div>
