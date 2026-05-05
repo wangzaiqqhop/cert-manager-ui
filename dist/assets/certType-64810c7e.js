@@ -1,0 +1,1 @@
+import{a as t}from"./axios-c15d7e59.js";const s={list(){return t.get("/cert-types")},create(e){return t.post("/cert-types",e)},update(e,r){return t.put(`/cert-types/${e}`,r)},remove(e){return t.delete(`/cert-types/${e}`)}};export{s as c};
