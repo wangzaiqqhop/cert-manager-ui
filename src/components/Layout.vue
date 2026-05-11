@@ -5,7 +5,7 @@
       <!-- 品牌区域 -->
       <div class="brand-logo-area">
         <div class="sidebar-logo-wrap">
-          <img src="/images/logo.svg" alt="CHATONE 捷通" class="sidebar-logo-img" />
+          <img src="/images/logo.svg" alt="证书管理系统" class="sidebar-logo-img" />
         </div>
         <div class="brand-logo-cn">证书管理系统</div>
         <div class="brand-logo-en">Certificate Management</div>

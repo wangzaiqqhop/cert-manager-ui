@@ -11,7 +11,7 @@
       <!-- 品牌Logo区域 -->
       <div class="login-brand-area">
         <div class="brand-logo-icon login-logo">
-          <img src="/images/logo.svg" alt="CHATONE 捷通" />
+          <img src="/images/logo.svg" alt="证书管理系统" />
         </div>
         <div class="login-system-title">证书管理系统</div>
         <div class="login-system-sub">Certificate Management System</div>
@@ -54,7 +54,7 @@
 
     <!-- 底部版权 -->
     <div class="login-copyright">
-      捷通智慧科技股份有限公司 © {{ new Date().getFullYear() }}
+      Certificate Management System © {{ new Date().getFullYear() }}
     </div>
   </div>
 </template>
